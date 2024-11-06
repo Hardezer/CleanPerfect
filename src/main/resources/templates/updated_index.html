@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion de Inventario</title> <!-- El título de la página -->
+
+    <!-- Se incluye el archivo de estilos CSS -->
+    <link rel="stylesheet" href="/css/updated_styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.2/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.2/dist/sweetalert2.min.js"></script>
+
+</head>
+<body>
+<header>
+    <!--Logo y navegacio de las tablas-->
+    <div class="logo-placeholder" onclick="window.location.href='/'">
+        <img src="/css/Logo_cleanperfect.png" alt="Logo" style="width: 170px; height: 50px;">
+    </div>
+    <a href="/productos/insumos" class="tablas-button">Insumos</a>
+    <a href="/maquinaria/stock" class="tablas-button">Maquinaria</a>
+    <a href="/ropa/stock" class="tablas-button">Ropa</a>
+    <a href="/empresa/clientes" class="tablas-button">Clientes</a>
+    <a href="#grafico-section" class="tablas-button">Gráfico</a>
+</header>
+
+<main>
+    <!--Botones para abrir los modal/formularios-->
+    <div class="button_a-container">
+        <button class="button_a" onclick="openModal('empresa')">
+            <img src="/css/agregar-usuario.png"  alt="Registrar Cliente Icono">
+            <span>Registrar Cliente</span>
+        </button>
+        <button class="button_a" onclick="openModal('producto')">
+            <img src="/css/agregar-producto.png" alt="Registrar Producto Icono">
+            <span>Registrar Producto</span>
+        </button>
+        <button class="button_a" onclick="openModal('ingreso')">
+            <img src="/css/ingresar-producto.png" alt="Ingresar Producto Icono">
+            <span>Ingresar Producto (Minoria)</span>
+        </button>
+    </div>
+    <div class="button_a-container">
+        <button class="button_b" onclick="openModal('entrada')">
+            <img src="/css/verificar.png" alt="Registrar Entrada Icono">
+            <span>Registrar Entrada (Mayoria)</span>
+        </button>
+        <button class="button_b" onclick="openModal('salida')">
+            <img src="/css/lista-de-verificacion.png" alt="Registrar Salida Icono">
+            <span>Registrar Salida</span>
+        </button>
+        <button class="button_b" onclick="window.location.href='http://localhost:8091/reportes/salidasPorEmpresa'">
+            <img src="/css/reporte.png" alt="Generar Reporte Icono">
+            <span>Generar Reporte</span>
+        </button>
+    </div>
+
+    <div class="button_a-container">
+        <button class="button_b" onclick="descargarRespaldo()">
+            <img src="/css/Descarga.png" alt="Descargar Respaldo Icono">
+            <span>Descargar Respaldo</span>
+        </button>
+        <button class="button_b" onclick="openModal('respaldo')">
+            <img src="/css/subida.png" alt="Registrar Salida Icono">
+            <span>Subir Respaldo</span>
+        </button>
+    </div>
+
+    <!-- Modal para registrar una empresa -->
+    <div id="modal-empresa" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('empresa')">&times;</span>
+            <h2>Registrar Cliente</h2>
+            <form id="formEmpresa">
+                <label for="nombreEmpresa">Nombre del Cliente:</label><br>
+                <input type="text" id="nombreEmpresa" name="nombreEmpresa" class="input-field"><br><br>
+                <button type="button" onclick="guardarEmpresa()" class="button">Guardar Cliente</button>
+                <button type="button" onclick="closeModal('empresa')" class="button">Salir</button>
+            </form>
+        </div>
+    </div>
+    <!-- Modal para subir un respaldo -->
+    <div id="modal-respaldo" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('respaldo')">&times;</span>
+            <h2>Subir respaldo</h2>
+            <form id="formRespaldo">
+                <label for="respaldo">Seleccione el respaldo a subir:</label><br>
+                <input type="file" id="fileRespaldo" name="fileRespaldo" class="input-field"><br><br>
+                <button type="button" onclick="cargarRespaldo()" class="button">Subir Respaldo</button>
+                <button type="button" onclick="closeModal('respaldo')" class="button">Salir</button>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Modal para ingresar un producto -->
+    <div id="modal-ingreso" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('ingreso')">&times;</span>
+            <h2>Ingresar producto</h2>
+            <form id="formIngresa">
+                <!-- Tipo de producto -->
+                <label for="tipoProductoo">Tipo de producto:</label>
+                <select id="tipoProductoo" name="tipoProductoo" class="input-field" onchange="mostrarFormulario()">
+                    <option value="" disabled selected>Seleccione el tipo de producto</option>
+                    <option value="insumo">Insumo</option>
+                    <option value="ropa">Ropa</option>
+                </select><br><br>
+
+                <div id="formInsumoo" class="hidden">
+                    <label for="codigoProductoInsumo">Código del producto:</label>
+                    <input type="text" id="codigoProductoInsumo" name="codigoProducto" class="input-field"><br><br>
+
+                    <label for="cantidadProductoInsumo">Cantidad:</label>
+                    <input type="number" id="cantidadProductoInsumo" name="cantidadProducto" class="input-field"><br><br>
+                </div>
+
+                <div id="formRopa" class="hidden">
+                    <label for="nombreProductoRopa">Nombre del producto:</label>
+                    <div class="input-suggestions">
+                        <input type="text" id="nombreProductoRopa" name="nombreProducto" oninput="buscarProducto()">
+                        <!-- Contenedor para las sugerencias de ropa -->
+                        <div id="sugerencias" class="suggestions"></div>
+                    </div><br>
+
+                    <label for="tallaProductoRopa">Talla:</label>
+                    <input type="text" id="tallaProductoRopa" name="tallaProducto" class="input-field"><br><br> <!-- Nuevo campo para la talla -->
+
+                    <label for="cantidadProductoRopa">Cantidad:</label>
+                    <input type="number" id="cantidadProductoRopa" name="cantidadProducto" class="input-field"><br>
+                </div>
+
+                <!-- Botones -->
+                <button type="button" onclick="ingresoProducto()" class="button">Ingresar Producto</button>
+                <button type="button" onclick="closeModal('ingreso')" class="button">Salir</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para registrar un producto -->
+    <div id="modal-producto" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('producto')">&times;</span>
+            <h2>Registrar Producto</h2>
+            <form id="formInsumo">
+                <!-- Tipo de Producto -->
+                <label for="tipoProducto">Tipo de Producto:</label>
+                <select id="tipoProducto" onchange="verificarTipo()">
+                    <option value="" disabled selected>Seleccione el tipo de producto</option>
+                    <option value="insumo">Insumos</option>
+                    <option value="maquina">Maquinaria</option>
+                    <option value="ropa">Ropa</option>
+                </select>
+
+                <div id="formProducto" style="display: none;">
+                    <!-- Insumo Form -->
+                    <div id="formInsumoFields" style="display: none;">
+                        <label for="codigoBarraInsumo">Código de Barras:</label>
+                        <input type="text" id="codigoBarraInsumo" name="codigoBarraInsumo" class="input-field">
+                        <label for="costoInsumo">Costo:</label>
+                        <input type="text" id="costoInsumo" name="costoInsumo" class="input-field">
+                        <label for="categoriaInsumo">Categoría:</label>
+                        <select id="categoriaInsumo" onchange="verificarNuevaCategoria()" class="input-field">
+                            <option value="" disabled selected>Seleccione una categoría</option>
+                            <option value="nueva">--Crear Nueva Categoría--</option>
+                        </select>
+                        <br><br>
+                    </div>
+
+                    <!-- Maquinaria Form -->
+                    <div id="formMaquinariaFields" style="display: none;">
+                        <label for="nombreMaquinaria">Nombre:</label>
+                        <input type="text" id="nombreMaquinaria" name="nombreMaquinaria" class="input-field">
+                        <label for="costoUsoMaquinaria">Costo de Uso:</label>
+                        <input type="text" id="costoUsoMaquinaria" name="costoUsoMaquinaria" class="input-field">
+                    </div>
+
+                    <!-- Ropa Form -->
+                    <div id="formRopaFields" style="display: none;">
+                        <label for="nombreRopa">Nombre:</label>
+                        <input type="text" id="nombreRopa" name="nombreRopa" class="input-field">
+                        <label for="tallaRopa">Talla:</label>
+                        <input type="text" id="tallaRopa" name="tallaRopa" class="input-field">
+                        <label for="precioRopa">Precio:</label>
+                        <input type="text" id="precioRopa" name="precioRopa" class="input-field">
+                        <br><br>
+                    </div>
+                </div>
+
+                <!-- Categoría -->
+                <div id="formatoContainer" style="display: none;">
+                    <label for="formatoCategoria">Formato:</label>
+                    <select id="formatoCategoria" onchange="verificarNuevoFormato()" class="input-field">
+                        <option value="" disabled selected>Seleccione un formato</option>
+                        <option value="nuevoFormato">--Crear Nuevo Formato--</option>
+                    </select>
+                    <br><br>
+                </div>
+
+                <!-- Nueva Categoría -->
+                <div id="nuevaCategoria" style="display: none;">
+                    <label for="nombreCategoria">Nombre de la Categoría:</label>
+                    <input type="text" id="nombreCategoria" name="nombreCategoria" class="input-field">
+                    <label for="unidadMedida">Unidad de Medida:</label>
+                    <select type="text" id="unidadMedida" name="unidadMedida" class="input-field">
+                        <option value="" disabled selected>Seleccione medida</option>
+                        <option value="U">U (Unidad)</option>
+                        <option value="L">L (Litro)</option>
+                        <option value="ML">ML (Mililitro)</option>
+                        <option value="G">G (Gramo)</option>
+                        <option value="KG">KG (Kilogramo)</option>
+                        <option value="CC">CC (Centímetros cúbicos)</option>
+                    </select>
+                    <label for="tamañoCategoria">Tamaño:</label>
+                    <input type="text" id="tamañoCategoria" name="tamañoCategoria" class="input-field">
+                    <br><br>
+                </div>
+
+                <!-- Nuevo Formato -->
+                <div id="nuevoFormato" style="display: none;">
+                    <label for="unidadMedidaFormato">Unidad de Medida:</label>
+                    <select type="text" id="unidadMedidaFormato" name="unidadMedidaFormato" class="input-field">
+                        <option value="" disabled selected>Seleccione medida</option>
+                        <option value="U">U (Unidad)</option>
+                        <option value="L">L (Litro)</option>
+                        <option value="ML">ML (Mililitro)</option>
+                        <option value="G">G (Gramo)</option>
+                        <option value="KG">KG (Kilogramo)</option>
+                        <option value="CC">CC (Centímetros cúbicos)</option>
+                    </select>
+                    <label for="tamañoFormato">Tamaño:</label>
+                    <input type="text" id="tamañoFormato" name="tamañoFormato" class="input-field">
+                    <br><br>
+                </div>
+
+                <!-- Botones -->
+                <button type="button" class="button" onclick="registrarProducto()">Registrar producto</button>
+                <button type="reset" class="button">Limpiar</button>
+                <button type="button" onclick="closeModal('producto')" class="button">Salir</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para registrar una entrada -->
+    <div id="modal-entrada" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('entrada')">&times;</span>
+            <h2>Registrar Entrada</h2>
+            <form id="formEntrada">
+                <div id="productosContainer">
+                    <div class="form-group">
+                        <!-- Tipo de producto -->
+                        <label for="tipoProductoEntrada">Tipo de producto:</label>
+                        <select id="tipoProductoEntrada" class="form-control" onchange="verificarTipoProducto()">
+                            <option value="" disabled selected>Seleccione el tipo de producto</option>
+                            <option value="insumo">Insumo</option>
+                            <option value="ropa">Ropa</option>
+                            <option value="maquinaria">Maquinaria</option>
+                        </select>
+                    </div>
+
+                    <!-- Formulario para agregar Insumo -->
+                    <div id="formInsumooo" style="display: none;">
+                        <div class="form-group">
+                            <label for="idProductoInsumo">Codigo de Barra:</label>
+                            <input type="text" id="idProductoInsumo" class="form-control input-field" placeholder="Ingrese el ID del producto">
+                        </div>
+                        <div class="form-group">
+                            <label for="cantidadInsumo">Cantidad:</label>
+                            <input type="number" id="cantidadInsumo" class="form-control input-field" placeholder="Ingrese la cantidad">
+                        </div>
+
+                        <!-- Botón para agregar producto de insumo -->
+                        <button type="button" id="agregarProductoInsumoBtn" class="button" onclick="agregarProducto('insumo')">Agregar Producto</button>
+                    </div>
+
+                    <!-- Formulario para agregar Ropa -->
+                    <div id="formRopaaa" style="display: none;">
+                        <div class="form-group">
+                            <label for="productoRopa">Nombre del producto:</label>
+                            <div class="input-suggestions">
+                                <input type="text" id="productoRopa" class="form-control input-field" placeholder="Ingrese el nombre del producto" oninput="buscarProductoo(this)">
+                                <!-- Contenedor para las sugerencias de ropa -->
+                                <div class="suggestions-container">
+                                    <div class="suggestions"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label for="tallaProducto">Talla:</label>
+                            <input type="text" id="tallaProducto" class="form-control input-field" placeholder="Ingrese la talla de la ropa">
+                        </div>
+                        <div class="form-group">
+                            <label for="cantidadRopa">Cantidad:</label>
+                            <input type="number" id="cantidadRopa" class="form-control input-field" placeholder="Ingrese la cantidad">
+                        </div>
+
+                        <!-- Botón para agregar producto de ropa -->
+                        <button type="button" id="agregarProductoRopaBtn" class="button" onclick="agregarProducto('ropa')">Agregar Producto</button>
+                    </div>
+                    <!-- Formulario para agregar Maquinaria -->
+                    <div id="formMa" style="display: none;">
+                        <div class="form-group">
+                            <label for="nombre-Maquinaria">Nombre de la maquinaria que desea reingresar:</label>
+                            <div class="input-suggestions">
+                                <input type="text" id="nombre-Maquinaria" class="form-control input-field" placeholder="Ingrese el nombre de la maquinaria que desea reingresar" oninput="buscarMaquinaria(this)">
+                                <!-- Contenedor para las sugerencias de maquinaria -->
+                                <div class="suggestions-container">
+                                    <div class="suggestions"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <input type="hidden" id="id-Maquinaria">
+                        <button type="button" id="agregarProductoMaquinariaBtn" class="button" onclick="agregarProducto('maquinaria')">Agregar Maquinaria</button>
+                    </div>
+                </div>
+
+                <!-- Tabla de productos agregados -->
+                <table id="productosTable" class="company-table">
+                    <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>ID/Talla</th>
+                        <th>Cantidad</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Las filas de productos se agregarán aquí -->
+                    </tbody>
+                </table>
+
+                <!-- Botones -->
+                <button type="button" onclick="registrarEntrada()" class="button">Registrar Entrada</button>
+                <button type="button" onclick="closeModal('entrada')" class="button">Salir</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para registrar una salida -->
+    <div id="modal-salida" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('salida')">&times;</span>
+            <h2>Registrar Salida</h2>
+            <div class="form-group">
+                <label for="empresaSalida">Cliente:</label>
+                <div class="input-suggestions">
+                    <input type="text" id="empresaSalida" class="form-control input-field" placeholder="Ingrese el cliente" oninput="buscarEmpresaActiva(this)">
+                    <!-- Contenedor para las sugerencias de ropa -->
+                    <div class="suggestions-container">
+                        <div class="suggestions"></div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <form id="formSalida">
+                <div id="productosContainerSal">
+                    <div class="form-group-sal">
+                        <!-- Tipo de producto -->
+                        <label for="tipoProductoSalida">Tipo de producto:</label>
+                        <select id="tipoProductoSalida" class="form-control" onchange="verificarTipoProductoSal()">
+                            <option value="" disabled selected>Seleccione el tipo de producto</option>
+                            <option value="insumo">Insumo</option>
+                            <option value="ropa">Ropa</option>
+                            <option value="maquinaria">Maquinaria</option>
+                        </select>
+                    </div>
+
+                    <!-- Formulario para agregar Insumo -->
+                    <div id="formInsumoSal" style="display: none;">
+                        <div class="form-group">
+                            <label for="idProductoInsumoSal">Codigo de Barra:</label>
+                            <input type="text" id="idProductoInsumoSal" class="form-control input-field" placeholder="Ingrese el ID del producto">
+                        </div>
+                        <div class="form-group">
+                            <label for="cantidadInsumoSal">Cantidad:</label>
+                            <input type="number" id="cantidadInsumoSal" class="form-control input-field" placeholder="Ingrese la cantidad">
+                            <div id="cantidadDisponibleInsumo" class="cantidad-disponible mt-2"></div>
+                        </div>
+
+                        <!-- Botón para agregar producto de insumo -->
+                        <button type="button" id="agregarProductoInsumoBtnSal" class="button" onclick="agregarProductoSal('insumo')">Agregar Producto</button>
+                    </div>
+
+                    <!-- Formulario para agregar Ropa -->
+                    <div id="formRopaSal" style="display: none;">
+                        <div class="form-group">
+                            <label for="productoRopaSal">Nombre del producto:</label>
+                            <div class="input-suggestions">
+                                <input type="text" id="productoRopaSal" class="form-control input-field" placeholder="Ingrese el nombre del producto" oninput="buscarProductooS(this)">
+                                <!-- Contenedor para las sugerencias de ropa -->
+                                <div class="suggestions-container">
+                                    <div class="suggestions"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label for="tallaProductoSal">Talla:</label>
+                            <input type="text" id="tallaProductoSal" class="form-control input-field" placeholder="Ingrese la talla de la ropa">
+                        </div>
+                        <div class="form-group">
+                            <label for="cantidadRopaSal">Cantidad:</label>
+                            <input type="number" id="cantidadRopaSal" class="form-control input-field" placeholder="Ingrese la cantidad">
+                            <div id="cantidadDisponibleRopa" class="cantidad-disponible mt-2"></div>
+                        </div>
+
+                        <!-- Botón para agregar producto de ropa -->
+                        <button type="button" id="agregarProductoRopaBtnSal" class="button" onclick="agregarProductoSal('ropa')">Agregar Producto</button>
+                    </div>
+                </div>
+                <!-- Formulario para agregar Maquinaria -->
+                <div id="formMaquinariaSal" style="display: none;">
+                    <div class="form-group">
+                        <label for="idProductoMaquinariaSal">Nombre de la Maquinaria:</label>
+                        <div class="input-suggestions">
+                            <input type="text" id="idProductoMaquinariaSal" oninput="buscarMaquinariaS(this)" placeholder="Buscar maquinaria...">
+                            <!-- Contenedor para las sugerencias de maquinaria -->
+                            <div class="suggestions-container">
+                                <div class="suggestions"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="fechaSalida">Fecha de Salida:</label>
+                        <input type="date" id="fechaSalida" class="form-control input-field" placeholder="Ingrese la fecha de salida">
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="fechaVuelta">Fecha de Reingreso:</label>
+                        <input type="date" id="fechaVuelta" class="form-control input-field" placeholder="Ingrese la fecha de reingreso">
+                    </div>
+
+                    <!-- Botón para agregar producto de maquinaria -->
+                    <button type="button" id="agregarProductoMaquinariaBtnSal" class="button" onclick="agregarProductoSal('maquinaria')">Agregar Producto</button>
+                </div>
+
+
+                <!-- Tabla de productos agregados -->
+                <table id="productosTableSal" class="company-table">
+                    <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>ID/Talla</th>
+                        <th>Cantidad</th>
+                        <th>Fecha Salida</th>
+                        <th>Fecha Reingreso</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Las filas de productos se agregarán aquí -->
+                    </tbody>
+                </table>
+
+                <!-- Botones -->
+                <button type="button" onclick="registrarSalida()" class="button">Registrar Salida</button>
+                <button type="button" onclick="closeModal('salida')" class="button">Salir</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para mostrar el gráfico -->
+    <br>
+        <br>
+    <div id="grafico-section" class="grafico-container">
+        <div class="grafico-container">
+            <canvas id="stockGraficoInsumos"></canvas>
+            <div class="grafico-nombre">Gráfico de Insumos</div>
+        </div>
+    </div>
+    <div id="grafico-section2" class="grafico-container">
+        <div class="grafico-container">
+            <canvas id="stockChartRopa"></canvas>
+            <div class="grafico-nombre">Gráfico de Ropa</div>
+        </div>
+    </div>
+
+</main>
+
+<!-- Se incluye el archivo de scripts JS -->
+<script src="/js/entrada.js"></script>
+<script src="/js/updated_index.js"></script>
+<script src="/js/categoria.js"></script>
+<script src="/js/empresa.js"></script>
+<script src="/js/producto.js"></script>
+<script src="/js/salida.js"></script>
+<script src="/js/grafico.js"></script>
+<script src="/js/graficoRopa.js"></script>
+<script src="/js/clientes.js"></script>
+<script src="/js/entrada.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maquinaria</title> <!-- El título de la página --> 
+
+    <!-- Se incluye el archivo de estilos CSS -->
+    <link rel="stylesheet" href="/css/updated_styles.css">
+</head>
+<body>
+<header>
+
+    <!--Logo y navegacio de las tablas-->
+    <div class="logo-placeholder" onclick="window.location.href='/'">
+        <img src="/css/Logo_cleanperfect.png" alt="Logo" style="width: 170px; height: 50px;">
+    </div>
+    <a href="/productos/insumos" class="tablas-button">Insumos</a>
+    <a href="/maquinaria/stock" class="tablas-button">Maquinaria</a>
+    <a href="/ropa/stock" class="tablas-button">Ropa</a>
+    <a href="/empresa/clientes" class="tablas-button">Clientes</a>
+</header>
+<main>
+
+    <!--Buscador de maquinaria-->
+    <div class="search-container">
+        <h3 class="title">Maquinaria & Herramientas</h3>
+        <div class="search-box">
+            <input type="text" id="searchNombre" class="search-input" placeholder="Buscar maquinaria">
+            <button onclick="buscarPorCriteriosM()" class="search-button">
+                <img src="/css/buscar.png" alt="Buscar">
+            </button>
+            <button onclick="limpiarBusqueda()" class="clear-button">
+                <img src="/css/cerrar.png" alt="Limpiar">
+            </button>
+        </div>
+    </div>
+
+    <!--Tabla de maquinaria-->
+    <table class="company-table">
+        <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Costo de Uso</th>
+            <th>Estado</th>
+            <th>Fecha de Salida</th>
+            <th>Fecha de Reingreso</th>
+            <th>Cliente</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody id="maquinaria-tbody">
+        <!-- Aquí se mostrarán las maquinarias -->
+        </tbody>
+    </table>
+
+    <!-- Editor para la maquinaria -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="document.getElementById('editModal').style.display='none'">&times;</span>
+            <h2>Editar Maquinaria</h2>
+            <form id="editForm">
+                <input type="hidden" id="edit-id">
+                <label for="edit-nombre">Nombre:</label>
+                <input type="text" id="edit-nombre">
+                <label for="edit-costoUso">Costo de Uso:</label>
+                <input type="number" id="edit-costoUso">
+                <label for="edit-estado">Estado:</label>
+                <select id="edit-estado">
+                    <option value="Disponible">Disponible</option>
+                    <option value="No disponible">No disponible</option>
+                    <option value="En uso">En uso</option>
+                </select>
+                <label for="edit-fechaSalida">Fecha de Salida:</label>
+                <input type="date" id="edit-fechaSalida">
+                <br> <br>
+                <label for="edit-fechaReingreso">Fecha de Reingreso:</label>
+                <input type="date" id="edit-fechaReingreso">
+                <input type="hidden" id="edit-empresa">
+                <br><br>
+                <button type="button" onclick="actualizarMaquinaria()">Guardar</button>
+                <button type="button" onclick="document.getElementById('editModal').style.display='none'">Cancelar</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+<!-- Se incluye el archivo de scripts JS -->
+<script src="/js/maquinaria.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.2/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.2/dist/sweetalert2.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Reporte de Salidas por Cliente</title>
+    <link rel="stylesheet" href="/css/reporte.css" />
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Reporte de Salidas</h1>
+    </div>
+
+    <!-- Listado de empresas y salidas simplificado -->
+    <div th:each="empresa : ${reporte}">
+        <div class="empresa-header">
+            <h2>
+                Cliente: <span th:text="${empresa.nombreEmpresa}"></span>
+                (<span th:text="${empresa.estadoEmpresa}" th:class="${empresa.estadoEmpresa == 'Activo' ? 'activo' : 'inactivo'}"></span>),
+                Total Costo de Salidas: <span th:text="${@numberUtils.formatCurrency(empresa.costoTotal)}"></span>
+            </h2>
+        </div>
+        <div>
+            <div th:each="salida : ${empresa.salidas}">
+                <div class="salida-detail">
+                    <span th:text="'Fecha: ' + ${salida.fecha} + ' - Costo Total de Salida: ' + ${@numberUtils.formatCurrency(salida.costo)}"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

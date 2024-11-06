@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ropa</title> <!-- El título de la página -->
+
+    <!-- Se incluye el archivo de estilos CSS -->
+    <link rel="stylesheet" href="/css/updated_styles.css">
+</head>
+<body>
+<header>
+
+    <!--Logo y navegacio de las tablas-->
+    <div class="logo-placeholder" onclick="window.location.href='/'">
+        <img src="/css/Logo_cleanperfect.png" alt="Logo" style="width: 170px; height: 50px;">
+    </div>
+    <a href="/productos/insumos" class="tablas-button">Insumos</a>
+    <a href="/maquinaria/stock" class="tablas-button">Maquinaria</a>
+    <a href="/ropa/stock" class="tablas-button">Ropa</a>
+    <a href="/empresa/clientes" class="tablas-button">Clientes</a>
+</header>
+<main>
+
+    <!--Buscador de ropa-->
+    <div class="search-container">
+        <h3 class="title">Ropa</h3>
+        <div class="search-box">
+            <input type="text" id="searchNombreTallaCantidad" class="search-input" placeholder="Buscar ropa">
+            <button onclick="buscarPorCriteriosRopa()" id="searchButton" class="search-button">
+                <img src="/css/buscar.png" alt="Buscar">
+            </button>
+            <button onclick="limpiarBusqueda()" id="clearButton" class="clear-button">
+                <img src="/css/cerrar.png" alt="Limpiar">
+            </button>
+        </div>
+    </div>
+
+    <!--Tabla de ropa-->
+    <table class="company-table">
+        <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Talla</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody id="tbodyProductosRopa">
+        <!-- Aquí se mostrarán los productos de ropa -->
+        </tbody>
+    </table>
+
+    <!-- Editor para la ropa -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="document.getElementById('editModal').style.display='none'">&times;</span>
+            <h2>Editar Producto</h2>
+            <form id="editForm">
+                <input type="hidden" id="edit-id">
+                <label for="edit-nombre">Nombre:</label>
+                <input type="text" id="edit-nombre">
+                <label for="edit-talla">Talla:</label>
+                <input type="text" id="edit-talla">
+                <label for="edit-precio">Precio:</label>
+                <input type="text" id="edit-precio">
+                <label for="edit-cantidad">Cantidad:</label>
+                <input type="text" id="edit-cantidad">
+                <button type="button" onclick="guardarEdicion()">Guardar</button>
+                <button type="button" onclick="document.getElementById('editModal').style.display='none'">Cancelar</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+<!-- Se incluye el archivo de scripts JS -->
+<script src="/js/ropa.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.2/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.2/dist/sweetalert2.min.js"></script>
+</body>
+</html>

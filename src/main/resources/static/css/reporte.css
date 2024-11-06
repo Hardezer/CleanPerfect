@@ -1,0 +1,229 @@
+/* Añadir margen al contenedor principal para separar del encabezado */
+.container {
+    max-width: 80%;
+    margin: 20px auto; /* Añadir margen superior para separar del encabezado */
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra alrededor del contenedor */
+}
+
+/* Estilos generales para el cuerpo del documento */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0; /* Elimina el margen predeterminado */
+    padding: 0; /* Elimina el padding predeterminado */
+    background-color: #f4f4f4;
+    color: #333; /* Color de texto predeterminado */
+}
+
+/* Estilos para el encabezado */
+header {
+    background: #4CAF50; /* Fondo verde */
+    color: white; /* Texto blanco */
+    padding: 15px; /* Espaciado interno */
+    display: flex; /* Utiliza flexbox para la disposición */
+    align-items: center; /* Alinea verticalmente los elementos */
+}
+
+/* Estilo para el contenedor del logo en el encabezado */
+header .logo-placeholder {
+    width: 175px;
+    height: 50px;
+    margin-right: 10px; /* Espaciado a la derecha */
+    cursor: pointer; /* Cambia el cursor al pasar el ratón */
+    background-color: white; /* Fondo blanco */
+    border-radius: 10px; /* Bordes redondeados */
+}
+
+/* Estilo para los enlaces en el encabezado */
+header a {
+    color: #ffffff; /* Texto blanco */
+    padding: 5px 10px; /* Espaciado interno */
+    text-decoration: none; /* Sin subrayado */
+    margin-right: 10px; /* Espaciado a la derecha */
+    cursor: pointer; /* Cambia el cursor al pasar el ratón */
+    border-radius: 5px; /* Bordes redondeados */
+}
+
+/* Estilo para los enlaces en el encabezado al pasar el ratón */
+header a.tablas-button:hover {
+    transform: scale(1.1); /* Aumenta ligeramente el tamaño */
+    transition: 0.1s; /* Transición suave */
+    background-color: rgba(0, 0, 0, 0.1); /* Fondo más oscuro al pasar el ratón */
+}
+
+/* Transición para los botones de tablas */
+header a.tablas-button {
+    transition: 0.1s;
+}
+
+/* Estilo para los botones de tablas */
+.tablas-button {
+    display: inline-block; /* Elemento en línea con propiedades de bloque */
+    padding: 6px 10px; /* Espaciado interno */
+    margin: 5px; /* Espaciado externo */
+    color: white; /* Color del texto */
+    text-decoration: none; /* Sin subrayado */
+    background-color: #4CAF50; /* Fondo verde */
+    border-radius: 5px; /* Bordes redondeados */
+    transition: background-color 0.3s ease; /* Suavizado de la transición del color de fondo */
+}
+
+/* Contenedor principal del encabezado con flexbox */
+.header_a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px; /* Añadir margen superior para separar del encabezado */
+}
+
+/* Estilos para el filtro de fechas */
+.date-filter {
+    display: flex;
+    align-items: center;
+    margin-right: 15px; /* Ajuste para alinear correctamente el formulario de filtro */
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan */
+}
+
+/* Espaciado uniforme para los elementos del formulario */
+.date-filter label,
+.date-filter input,
+.date-filter button {
+    margin: 0 4px; /* Espaciado uniforme */
+}
+
+/* Estilo para el título principal */
+h1 {
+    color: #333; /* Color del texto */
+    text-align: left;
+    font-size: 28px;
+    margin-bottom: 20px;
+    flex-grow: 1; /* Asegura que el título ocupe el espacio disponible */
+}
+
+/* Estilo para el encabezado de la empresa */
+.empresa-header {
+    position: relative;
+    background-color: #0056b3;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin-top: 20px;
+    cursor: pointer; /* Cambia el cursor al pasar el ratón */
+}
+
+/* Estilo para el título dentro del encabezado de la empresa */
+.empresa-header h2 {
+    margin: 0;
+}
+
+/* Estilo para el estado 'Activo' */
+.activo {
+    color: #4CAF50; /* Texto verde para 'Activo' */
+}
+
+/* Estilo para el estado 'Inactivo' */
+.inactivo {
+    color: #FF5722; /* Texto rojo para 'Inactivo' */
+}
+
+/* Estilo para la tabla */
+table {
+    width: 100%;
+    margin-top: 10px;
+    border-collapse: collapse; /* Colapsar bordes */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra alrededor de la tabla */
+}
+
+/* Estilo para las celdas de la tabla */
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+/* Estilo para las cabeceras de la tabla */
+th {
+    background-color: #28a745;
+    color: white;
+    font-size: 16px;
+}
+
+/* Estilo para las filas pares de la tabla */
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Estilo para el botón de detalles */
+.details-button {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%); /* Centrar verticalmente */
+    transition: 0.1s;
+}
+
+/* Estilo para los detalles de salida */
+.salida-detail {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Sombra alrededor del detalle */
+}
+
+/* Estilo para los elementos de texto dentro del detalle de salida */
+.salida-detail span {
+    font-size: 16px;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Estilo general para los botones */
+button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: 0.1s;
+}
+
+/* Estilo para los botones al pasar el ratón */
+button:hover {
+    background-color: #1e6f32;
+    transform: scale(1.1); /* Aumenta ligeramente el tamaño */
+    transition: 0.1s;
+}
+
+/* Esconder detalles por defecto */
+.details {
+    display: none;
+}
+
+.swal2-confirm {
+    background-color: #28a745 !important; /* Cambia este color al tono de verde que prefieras */
+    color: white !important;
+    border: none !important;
+    border-radius: 4px !important;
+    padding: 10px 24px !important;
+    font-size: 16px !important;
+    box-shadow: none !important; /* Elimina el borde gris */
+    transition: transform 0.1s ease-in-out, background-color 0.1s ease-in-out !important; /* Añadir transición */
+}
+
+.swal2-confirm:hover {
+    transform: scale(1.1) !important; /* Añadir transformación en hover */
+    background-color: #218838 !important; /* Opcional: cambiar el color en hover */
+}
+
+.swal2-confirm:focus {
+    outline: none !important; /* Elimina el borde de enfoque */
+    box-shadow: none !important; /* Elimina cualquier sombra de enfoque */
+}

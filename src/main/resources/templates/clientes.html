@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes</title> <!-- El título de la página -->
+
+    <!-- Se incluye el archivo de estilos CSS -->
+    <link rel="stylesheet" href="/css/updated_styles.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.2/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.2/dist/sweetalert2.min.js"></script>
+</head>
+<body>
+<header>
+    <!--Logo y navegacio de las tablas-->
+    <div class="logo-placeholder" onclick="window.location.href='/'">
+        <img src="/css/Logo_cleanperfect.png" alt="Logo" style="width: 170px; height: 50px;">
+    </div>
+    <a href="/productos/insumos" class="tablas-button">Insumos</a>
+    <a href="/maquinaria/stock" class="tablas-button">Maquinaria</a>
+    <a href="/ropa/stock" class="tablas-button">Ropa</a>
+    <a href="/empresa/clientes" class="tablas-button">Clientes</a>
+</header>
+<main>
+
+    <!--Buscador de clientes-->
+    <div class="search-container">
+        <h3 class="title">Clientes</h3>
+        <div class="search-box">
+            <input type="text" id="searchNombre" class="search-input" placeholder="Buscar cliente">
+            <button onclick="buscarPorCriterios()" class="search-button">
+                <img src="/css/buscar.png" alt="Buscar">
+            </button>
+            <button onclick="limpiarBusqueda()" class="clear-button">
+                <img src="/css/cerrar.png" alt="Limpiar">
+            </button>
+        </div>
+    </div>
+
+    <!--Tabla de clientes-->
+    <table class="company-table">
+        <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody id="clientes-tbody">
+        <!-- Aquí se mostrarán los clientes -->
+        </tbody>
+    </table>
+
+    <!-- Editor para los clientes -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="document.getElementById('editModal').style.display='none'">&times;</span>
+            <h2>Editar Cliente</h2>
+            <form id="editForm">
+                <input type="hidden" id="edit-id">
+                <label for="edit-nombre">Nombre:</label>
+                <input type="text" id="edit-nombre">
+                <label for="edit-estado">Estado:</label>
+                <select id="edit-estado">
+                    <option value="Activo">Activo</option>
+                    <option value="Inactivo">Inactivo</option>
+                </select>
+                <button type="button" onclick="actualizarCliente()">Guardar</button>
+                <button type="button" onclick="document.getElementById('editModal').style.display='none'">Cancelar</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+<!-- Se incluye el archivo de scripts JS -->
+<script src="/js/clientes.js"></script>
+</body>
+</html>

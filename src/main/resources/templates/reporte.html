@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Reporte de Salidas por Cliente</title>
+    <link rel="stylesheet" href="/css/reporte.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- SweetAlert2 -->
+    <script src="/js/reporte.js" defer></script>
+</head>
+<body>
+<header>
+    <!--Logo y navegación de las tablas-->
+    <div class="logo-placeholder" onclick="window.location.href='/'">
+        <img src="/css/Logo_cleanperfect.png" alt="Logo" style="width: 170px; height: 50px;">
+    </div>
+    <a href="/productos/insumos" class="tablas-button">Insumos</a>
+    <a href="/maquinaria/stock" class="tablas-button">Maquinaria</a>
+    <a href="/ropa/stock" class="tablas-button">Ropa</a>
+    <a href="/empresa/clientes" class="tablas-button">Clientes</a>
+</header>
+
+<div class="container">
+    <div class="header_a">
+        <h1>Reporte de Salidas por Cliente</h1>
+        <!-- Formulario de filtro de fechas -->
+        <div class="date-filter">
+            <label for="start-date">Desde:</label>
+            <input type="date" id="start-date">
+            <label for="end-date">Hasta:</label>
+            <input type="date" id="end-date">
+            <button onclick="applyDateFilter()">Filtrar</button>
+            <button onclick="resetFilter()">Restablecer</button>
+            <button id="downloadReportBtn" onclick="downloadReport()" style="display:none;">Descargar Reporte</button>
+        </div>
+    </div>
+
+    <!-- Listado de empresas y salidas -->
+    <div th:each="empresa : ${reporte}">
+        <div class="empresa-header">
+            <h2>
+                Cliente: <span th:text="${empresa.nombreEmpresa}"></span>
+                (<span th:text="${empresa.estadoEmpresa}" th:class="${empresa.estadoEmpresa == 'Activo' ? 'activo' : 'inactivo'}"></span>)
+            </h2>
+            <div class="details-button">
+                <button type="button" th:onclick="'toggleDetails(\'details' + ${empresa.empresaId} + '\', this)'">Ver Detalles</button>
+            </div>
+        </div>
+        <div th:id="'details' + ${empresa.empresaId}" style="display:none;">
+            <div th:each="salida : ${empresa.salidas}">
+                <div class="salida-detail">
+                    <span th:text="'Fecha: ' + ${salida.fecha} + ' - Costo Total de Salida: ' + ${@numberUtils.formatCurrency(salida.costo)}"></span>
+                    <button type="button" th:onclick="'toggleSalidaDetails(\'salidaDetails' + ${empresa.empresaId} + ${salida.salidaId} + '\', this)'">Ver Detalle</button>
+                </div>
+                <div th:id="'salidaDetails' + ${empresa.empresaId} + ${salida.salidaId}" style="display:none;">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Cantidad</th>
+                            <th>Costo Total</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="detalle : ${salida.detallesSalida}">
+                            <td th:text="${detalle.itemSalidaNombre}"></td>
+                            <td th:text="${detalle.cantidad}"></td>
+                            <td th:text="${@numberUtils.formatCurrency(detalle.costoTotal)}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
